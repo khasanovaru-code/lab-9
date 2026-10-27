@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Models Agency - New Models</title>
+    <!-- Подключаем ваш проверенный main.css -->
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- Маленькие стили только для модального окна Detail, чтобы не портить main.css -->
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="container">
+            <span class="Models">MODELS AGENCY</span>
+            <nav>
+                <ul>
+                    <li><a href="/index.html">BEST MODELSE</a></li>
+                    <li><a href="/catalogue.html">CATALOGUE</a></li>
+                    <li class="active"><a href="/newmodels.html">NEW MODELS</a></li>
+                    <li class="btn"><a href="subscribe.html">SUBSCRIBE</a></li>      
+                </ul>
+            </nav>
+        </header>
+
+        <!-- LIST: Используем ваши классы .trending и .models из main.css -->
+        <section class="trending container">
+            <h3>New Faces</h3>
+            <div class="models" id="json-models-container">
+                <!-- Карточки загружаются автоматически из data.json -->
+            </div>
+        </section>
+    </div>
+
+    <!-- DETAIL: Модальное окно при клике -->
+    <div class="modal" id="modelModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <img id="modal-photo" src="" alt="">
+            <h2 id="modal-name" style="margin-bottom: 10px; font-size: 20px;"></h2>
+            <p><strong>Возраст:</strong> <span id="modal-age"></span></p>
+            <p><strong>Рост:</strong> <span id="modal-height"></span></p>
+            <p><strong>Параметры:</strong> <span id="modal-parameters"></span></p>
+            <p id="modal-bio" style="margin-top: 10px; font-size: 14px; color: #666;"></p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="blocks container">
+            <div>
+                <span class="MODELS">MODELS AGENCY</span>
+                <p>A world of faces. A world of stories.</p>
+            </div>
+            <div>
+                <ul>
+                    <li>Explore models</li>
+                    <li>Your favorites</li>
+                    <li>Get the edit</li>
+                </ul>
+            </div>
+            <div>
+                <h5>
+                    © 2026 MA · Independent discovery
+                </h5>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипт для работы JSON (List + Detail) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.getElementById('json-models-container');
+            const modal = document.getElementById('modelModal');
+            const closeModal = document.getElementById('closeModal');
+
+            fetch('/data.json')
+                .then(response => response.json())
+                .then(data => {
+                    container.innerHTML = '';
+                    const modelsList = data.new_models || data.models;
+
+                    modelsList.forEach(model => {
+                        const block = document.createElement('div');
+                        block.className = 'block';
+
+                        // Вывод списка (List)
+                        block.innerHTML = `
+                            <img src="${model.photo}" alt="${model.name}">
+                            <span>${model.name}<br>${model.age} лет (${model.height})</span>
+                        `;
+
+                        // Открытие детальной информации (Detail) по клику
+                        block.addEventListener('click', () => {
+                            document.getElementById('modal-photo').src = model.photo;
+                            document.getElementById('modal-name').textContent = model.name;
+                            document.getElementById('modal-age').textContent = model.age + ' лет';
+                            document.getElementById('modal-height').textContent = model.height;
+                            document.getElementById('modal-parameters').textContent = model.parameters || '85-60-90';
+                            document.getElementById('modal-bio').textContent = model.bio || 'Перспективная модель агентства.';
+                            
+                            modal.style.display = 'flex';
+                        });
+
+                        container.appendChild(block);
+                    });
+                })
+                .catch(error => console.error('Ошибка загрузки JSON:', error));
+
+            // Закрытие модального окна
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
