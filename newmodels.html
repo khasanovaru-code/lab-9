@@ -5,10 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Models Agency - New Models</title>
-    <!-- Подключаем ваш проверенный main.css -->
     <link rel="stylesheet" href="/css/main.css">
     
-    <!-- Маленькие стили только для модального окна Detail, чтобы не портить main.css -->
 
 </head>
 
@@ -26,16 +24,13 @@
             </nav>
         </header>
 
-        <!-- LIST: Используем ваши классы .trending и .models из main.css -->
         <section class="trending container">
             <h3>New Faces</h3>
             <div class="models" id="json-models-container">
-                <!-- Карточки загружаются автоматически из data.json -->
             </div>
         </section>
     </div>
 
-    <!-- DETAIL: Модальное окно при клике -->
     <div class="modal" id="modelModal">
         <div class="modal-content">
             <span class="close-btn" id="closeModal">&times;</span>
@@ -69,7 +64,6 @@
         </div>
     </footer>
 
-    <!-- Скрипт для работы JSON (List + Detail) -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const container = document.getElementById('json-models-container');
@@ -92,7 +86,6 @@
                             <span>${model.name}<br>${model.age} лет (${model.height})</span>
                         `;
 
-                        // Открытие детальной информации (Detail) по клику
                         block.addEventListener('click', () => {
                             document.getElementById('modal-photo').src = model.photo;
                             document.getElementById('modal-name').textContent = model.name;
@@ -109,7 +102,6 @@
                 })
                 .catch(error => console.error('Ошибка загрузки JSON:', error));
 
-            // Закрытие модального окна
             closeModal.addEventListener('click', () => {
                 modal.style.display = 'none';
             });
